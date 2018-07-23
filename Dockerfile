@@ -1,10 +1,10 @@
-FROM alpine:3.7
+FROM alpine:3.8
 
 MAINTAINER YuXiao
 # Standard set up Nginx Alpine
 # https://github.com/nginxinc/docker-nginx/blob/1.14.0/mainline/alpine/Dockerfile
 
-ENV ALPINE_VERSION "3.7"
+ENV ALPINE_VERSION "3.8"
 ENV NGINX_VERSION "1.14.0"
 ENV TZ "Asia/Shanghai"
 
@@ -13,7 +13,7 @@ RUN \
 sed -i "s#VERSION#${ALPINE_VERSION}#g" /etc/apk/repositories && \
 apk update
 
-RUN apk add -q tzdata && \
+RUN apk add tzdata && \
 cp -rf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
 
 # Install Nginx
@@ -65,8 +65,8 @@ CONFIG="\
 " && \
 addgroup -S nginx && \ 
 adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx && \
-apk add -q --virtual .build-deps gcc libc-dev make openssl-dev pcre-dev zlib-dev linux-headers wget libxslt-dev gd-dev geoip-dev && \
-wget -q https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz -O nginx.tgz && \
+apk add --virtual .build-deps gcc libc-dev make openssl-dev pcre-dev zlib-dev linux-headers wget libxslt-dev gd-dev geoip-dev && \
+wget https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz -O nginx.tgz && \
 mkdir -p /usr/src/nginx/ && \
 tar -zxf nginx.tgz --strip-components=1 -C /usr/src/nginx/ && \
 rm -f nginx.tgz && \
@@ -102,9 +102,9 @@ runDeps="$( \
     | tr ',' '\n' \
     | sort -u \
     | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }')" && \
-apk add -q --virtual .nginx-rundeps ${runDeps} && \
-apk del -q .build-deps && \
-apk del -q .gettext && \
+apk add --virtual .nginx-rundeps ${runDeps} && \
+apk del .build-deps && \
+apk del .gettext && \
 mv /tmp/envsubst /usr/local/bin/ && \
 ln -sf /dev/stdout /var/log/nginx/access.log && \
 ln -sf /dev/stderr /var/log/nginx/error.log
