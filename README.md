@@ -19,7 +19,7 @@ docker build --no-cache -t docker-nginx https://github.com/YuXiaoCoder/docker-ng
 ```bash
 git clone https://github.com/YuXiaoCoder/docker-nginx.git
 cd docker-nginx/
-./tools/build_images.sh
+docker build --no-cache --tag docker-nginx .
 ```
 
 ### 创建配置文件
