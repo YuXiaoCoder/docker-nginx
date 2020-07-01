@@ -2,9 +2,7 @@
 
 ### 起因
 
-+ 为了方便云服务器部署并升级`Nginx`, 故封装了`Docker`镜像;
-+ 本镜像仅开放了`80`端口及`443`端口(若需要);
-+ 请自行理解`docker`的端口映射及目录映射;
++ 为方便云服务器部署并升级`Nginx`, 在官方镜像的基础上封装了镜像，仅开放了`80`及`443`端口;
 
 ### 构建镜像
 
@@ -17,8 +15,8 @@ docker build --no-cache -t docker-nginx https://github.com/YuXiaoCoder/docker-ng
 + 通过本地构建镜像, 先`clone`仓库到本地, 再构建镜像:
 
 ```bash
-git clone https://github.com/YuXiaoCoder/docker-nginx.git
-cd docker-nginx/
+git clone https://github.com/YuXiaoCoder/docker-nginx.git /opt/docker-nginx
+cd /opt/docker-nginx/
 docker build --no-cache --tag docker-nginx .
 ```
 
@@ -27,8 +25,8 @@ docker build --no-cache --tag docker-nginx .
 + 创建`vhost`配置文件(请勿修改监听端口), 可以参考`conf/nginx`目录中的配置文件:
 
 ```bash
-mkdir -p /etc/nginx/conf.d/
-vim /etc/nginx/conf.d/vhost.conf
+mkdir -p /data/nginx/conf.d/
+vim /data/nginx/conf.d/default.conf
 ```
 
 ```text
@@ -52,8 +50,8 @@ echo 'Hello, World' >> /data/www/index.html
 + 已经在镜像中优化了`nginx.conf`配置, 若仍需自定义, 请自行配置:
 
 ```bash
-mkdir -p /etc/nginx/
-touch /etc/nginx/nginx.conf
+mkdir -p /data/nginx/
+vim /data/nginx/nginx.conf
 ```
 
 ### 设置环境变量
